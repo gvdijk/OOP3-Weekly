@@ -5,6 +5,7 @@ import java.util.concurrent.locks.*;
 
 public class ThreadCooperation {
   private static Account account = new Account();
+  private static Object lock = new Object();
 
   public static void main(String[] args) {
     // Create a thread pool with two threads
@@ -43,7 +44,7 @@ public class ThreadCooperation {
   // An inner class for account
   private static class Account {
     // Create a new lock
-    private static Lock lock = new ReentrantLock();
+    private static final Lock lock = new ReentrantLock();
 
     // Create a condition
     private static Condition newDeposit = lock.newCondition();
@@ -55,36 +56,39 @@ public class ThreadCooperation {
     }
 
     public void withdraw(int amount) {
-      lock.lock(); // Acquire the lock
-      try {
-        while (balance < amount) {
-          System.out.println("\t\t\tWait for a deposit");
-          newDeposit.await();
+      //lock.lock(); // Acquire the lock
+      synchronized (lock) {
+        try {
+          while (balance < amount) {
+            System.out.println("\t\t\tWait for a deposit");
+            //newDeposit.await();
+            lock.wait();
+          }
+          balance -= amount;
+          System.out.println("\t\t\tWithdraw " + amount +
+                  "\t\t" + getBalance());
+        } catch (InterruptedException ex) {
+          ex.printStackTrace();
+        } finally {
+          //lock.unlock(); // Release the lock
         }
-        balance -= amount;
-        System.out.println("\t\t\tWithdraw " + amount +
-          "\t\t" + getBalance());
-      }
-      catch (InterruptedException ex) {
-        ex.printStackTrace();
-      }
-      finally {
-        lock.unlock(); // Release the lock
       }
     }
 
     public void deposit(int amount) {
-      lock.lock(); // Acquire the lock
-      try {
-        balance += amount;
-        System.out.println("Deposit " + amount +
-          "\t\t\t\t\t" + getBalance());
+      //lock.lock(); // Acquire the lock
+      synchronized (lock) {
+        try {
+          balance += amount;
+          System.out.println("Deposit " + amount +
+                  "\t\t\t\t\t" + getBalance());
 
-        // Signal thread waiting on the condition
-        newDeposit.signalAll();
-      }
-      finally {
-        lock.unlock(); // Release the lock
+          // Signal thread waiting on the condition
+          //newDeposit.signalAll();
+          lock.notifyAll();
+        } finally {
+          //lock.unlock(); // Release the lock
+        }
       }
     }
   }
