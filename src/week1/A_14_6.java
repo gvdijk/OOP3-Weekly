@@ -7,21 +7,23 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
-public class A_16_4 extends Application{
+public class A_14_6 extends Application{
     public void start(Stage primaryStage){
+        int boardSize = 8;
         double width = 50;
         double height = 50;
-        boolean black = true;
 
         Pane pane = new Pane();
 
-        for (int i=0; i<7; i++){
-            for (int j=0; j<7; j++){
+        for (int i=0; i<boardSize; i++){
+            for (int j=0; j<boardSize; j++){
                 Rectangle box = new Rectangle(j*width, i*height, width, height);
-                if(black) {black=false; box.setFill(Color.WHITE);}
-                else {black=true; box.setFill(Color.BLACK);}
+                if((i%2==0 && j%2==1) || (i%2==1 && j%2==0)){
+                    box.setFill(Color.WHITE);
+                }else{
+                    box.setFill(Color.BLACK);
+                }
                 pane.getChildren().add(box);
-                System.out.println("x = " + j*width + ", y = " + i*height);
             }
         }
 
