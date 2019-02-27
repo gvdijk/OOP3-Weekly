@@ -1,7 +1,30 @@
 package week1;
 
-public class TaskThreadDemo {
-    public static void main(String[] args) {
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.scene.control.Label;
+
+public class TaskThreadDemo extends Application {
+    static Label output = new Label("Output:\n");
+
+    public void start(Stage primaryStage) {
+        Pane pane = new StackPane();
+        output.setWrapText(true);
+        pane.getChildren().add(output);
+
+        Scene scene = new Scene(pane, 500, 200);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Mistakes");
+        primaryStage.show();
+
+        startThreads();
+    }
+
+    private void startThreads() {
         // Create tasks
         Runnable printA = new PrintChar('a', 100);
         Runnable printB = new PrintChar('b', 100);
@@ -16,18 +39,22 @@ public class TaskThreadDemo {
         thread2.start();
         thread3.start();
     }
+
+    synchronized static void addOutput(String charToPrint) {
+        output.setText(output.getText() + charToPrint);
+    }
 }
 
 // The task for printing a character a specified number of times
 class PrintChar implements Runnable {
-    private char charToPrint; // The character to print
+    private String charToPrint; // The character to print
     private int times; // The number of times to repeat
 
     /** Construct a task with a specified character and number of
      * times to print the character
      */
     public PrintChar(char c, int t) {
-        charToPrint = c;
+        charToPrint = String.valueOf(c);
         times = t;
     }
 
@@ -36,7 +63,7 @@ class PrintChar implements Runnable {
      */
     public void run() {
         for (int i = 0; i < times; i++) {
-            System.out.print(charToPrint);
+            Platform.runLater( () -> TaskThreadDemo.addOutput(charToPrint) );
         }
     }
 }
@@ -53,7 +80,8 @@ class PrintNum implements Runnable {
     @Override /** Tell the thread how to run */
     public void run() {
         for (int i = 1; i <= lastNum; i++) {
-            System.out.print(" " + i);
+            String b = String.valueOf(i);
+            Platform.runLater( () -> TaskThreadDemo.addOutput(b) );
         }
     }
 }
