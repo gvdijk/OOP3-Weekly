@@ -6,9 +6,10 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 
 public class BounceBallControl extends Application {
+    BallPane ballPane = new BallPane(); // Create a ball pane
+
     @Override // Override the start method in the Application class
     public void start(Stage primaryStage) {
-        BallPane ballPane = new BallPane(); // Create a ball pane
 
         // Pause and resume animation
         ballPane.setOnMousePressed(e -> ballPane.pause());
@@ -22,6 +23,12 @@ public class BounceBallControl extends Application {
             else if (e.getCode() == KeyCode.DOWN) {
                 ballPane.decreaseSpeed();
             }
+            else if (e.getCode() == KeyCode.RIGHT) {
+                ballPane.increaseSize();
+            }
+            else if (e.getCode() == KeyCode.LEFT) {
+                ballPane.decreaseSize();
+            }
         });
 
         // Create a scene and place it in the stage
@@ -32,5 +39,9 @@ public class BounceBallControl extends Application {
 
         // Must request focus after the primary stage is displayed
         ballPane.requestFocus();
+    }
+
+    public void stop() {
+        ballPane.setAlive(false);
     }
 }

@@ -8,10 +8,11 @@ import javafx.scene.shape.Circle;
 import static java.lang.Thread.sleep;
 
 public class BallPane extends Pane {
-    public final double radius = 20;
+    public double radius = 20;
     private double x = radius, y = radius;
     private double dx = 1, dy = 1;
     private Circle circle = new Circle(x, y, radius);
+    private boolean alive = true;
     private boolean playing = true;
     private int playrate = 50;
 
@@ -23,7 +24,7 @@ public class BallPane extends Pane {
 
         new Thread(() -> {
             try {
-                while (true) {
+                while (alive) {
                     if (playing) {
                         Platform.runLater(() -> moveBall());
                     }
@@ -33,7 +34,6 @@ public class BallPane extends Pane {
                 e.printStackTrace();
             }
         }).start();
-        System.out.println("Oui");
     }
 
     public void pause() { playing = false; }
@@ -44,13 +44,31 @@ public class BallPane extends Pane {
 
     public void increaseSpeed() { playrate = playrate > 1 ? playrate - 1 : 1; }
 
+    public void decreaseSize() {
+        radius *= 0.9;
+        circle.setRadius(radius);
+    }
+
+    public void increaseSize() {
+        radius *= 1.1;
+        circle.setRadius(radius);
+    }
+
+    public void nextColor(Circle c) {
+        if      (c.getFill() == Color.GREEN) { c.setFill(Color.BLUE); System.out.println("Green"); }
+        else if (c.getFill() == Color.BLUE) { c.setFill(Color.RED); System.out.println("Blue"); }
+        else if (c.getFill() == Color.RED) { c.setFill(Color.GREEN); System.out.println("Red"); }
+    }
+
     protected void moveBall() {
         // Check boundaries
         if (x < radius || x > getWidth() - radius) {
             dx *= -1; // Change ball move direction
+            nextColor(circle);
         }
         if (y < radius || y > getHeight() - radius) {
             dy *= -1; // Change ball move direction
+            nextColor(circle);
         }
 
         // Adjust ball position
@@ -59,4 +77,13 @@ public class BallPane extends Pane {
         circle.setCenterX(x);
         circle.setCenterY(y);
     }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
 }
