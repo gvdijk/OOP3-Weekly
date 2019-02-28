@@ -17,7 +17,12 @@ public class A_14_6 extends Application{
 
         for (int i=0; i<boardSize; i++){
             for (int j=0; j<boardSize; j++){
-                Rectangle box = new Rectangle(j*width, i*height, width, height);
+                //Rectangle box = new Rectangle(j*width, i*height, width, height);
+                Rectangle box = new Rectangle();
+                box.widthProperty().bind(pane.widthProperty().divide(boardSize));
+                box.heightProperty().bind(pane.heightProperty().divide(boardSize));
+                box.xProperty().bind(pane.widthProperty().divide(boardSize).multiply(j));
+                box.yProperty().bind(pane.heightProperty().divide(boardSize).multiply(i));
                 if((i%2==0 && j%2==1) || (i%2==1 && j%2==0)){
                     box.setFill(Color.WHITE);
                 }else{
