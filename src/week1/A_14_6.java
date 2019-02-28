@@ -14,6 +14,7 @@ public class A_14_6 extends Application{
         double height = 50;
 
         Pane pane = new Pane();
+        pane.setPrefSize(600, 600);
 
         for (int i=0; i<boardSize; i++){
             for (int j=0; j<boardSize; j++){
