@@ -3,13 +3,15 @@ package week2.stock;
 import java.util.ArrayList;
 
 public class StockGrabber implements Subject {
-    private ArrayList<Observer> observers = new ArrayList<>();
+    private ArrayList<Observer> observers;
 
     private double ibmPrice;
     private double aaplPrice;
     private double googPrice;
 
-    public StockGrabber() {}
+    public StockGrabber() {
+        observers = new ArrayList<>();
+    }
 
     public void register(Observer newObserver) {
         observers.add(newObserver);
