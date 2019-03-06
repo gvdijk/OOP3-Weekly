@@ -15,4 +15,14 @@ abstract class ToppingDecorator implements Pizza {
     public double getCost() {
         return tempPizza.getCost();
     }
+
+    @Override
+    public String getSize() {
+        return tempPizza.getSize();
+    }
+
+    @Override
+    public void setSize(String size) {
+        tempPizza.setSize(size);
+    }
 }
