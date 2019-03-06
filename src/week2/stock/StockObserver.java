@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class StockObserver implements Observer, ViewSubject {
 
-    private ArrayList<View> views = new ArrayList<>();
+    private ArrayList<View> views;
     
     private double ibmPrice;
     private double aaplPrice;
@@ -20,6 +20,7 @@ public class StockObserver implements Observer, ViewSubject {
     private Subject stockGrabber;
     
     public StockObserver(Subject stockGrabber) {
+        views = new ArrayList<>();
         this.stockGrabber = stockGrabber;
         this.observerID = ++observerIDTracker;
         stockGrabber.register(this);
