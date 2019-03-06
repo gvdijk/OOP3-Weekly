@@ -25,14 +25,4 @@ public class Mozzarella extends ToppingDecorator {
         System.out.println("Cost of mozzarella: " + cost);
         return tempPizza.getCost() + cost;
     }
-
-    @Override
-    public String getSize() {
-        return tempPizza.getSize();
-    }
-
-    @Override
-    public void setSize(String size) {
-        tempPizza.setSize(size);
-    }
 }
