@@ -10,8 +10,6 @@ import javafx.scene.Scene;
 public class A_14_6 extends Application{
     public void start(Stage primaryStage){
         int boardSize = 8;
-        double width = 50;
-        double height = 50;
 
         Pane pane = new Pane();
         pane.setPrefSize(600, 600);

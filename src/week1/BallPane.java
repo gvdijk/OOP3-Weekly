@@ -20,8 +20,6 @@ public class BallPane extends Pane {
         circle.setFill(Color.GREEN); // Set ball color
         getChildren().add(circle); // Place a ball into this pane
 
-        // Create an animation for moving the ball
-
         new Thread(() -> {
             try {
                 while (alive) {
@@ -55,9 +53,9 @@ public class BallPane extends Pane {
     }
 
     public void nextColor(Circle c) {
-        if      (c.getFill() == Color.GREEN) { c.setFill(Color.BLUE); System.out.println("Green"); }
-        else if (c.getFill() == Color.BLUE) { c.setFill(Color.RED); System.out.println("Blue"); }
-        else if (c.getFill() == Color.RED) { c.setFill(Color.GREEN); System.out.println("Red"); }
+        if      (c.getFill() == Color.GREEN)    { c.setFill(Color.BLUE); }
+        else if (c.getFill() == Color.BLUE)     { c.setFill(Color.RED); }
+        else if (c.getFill() == Color.RED)      { c.setFill(Color.GREEN); }
     }
 
     protected void moveBall() {
