@@ -17,12 +17,12 @@ abstract class ToppingDecorator implements Pizza {
     }
 
     @Override
-    public String getSize() {
+    public PizzaSize getSize() {
         return tempPizza.getSize();
     }
 
     @Override
-    public void setSize(String size) {
+    public void setSize(PizzaSize size) {
         tempPizza.setSize(size);
     }
 }

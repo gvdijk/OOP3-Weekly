@@ -3,9 +3,9 @@ package week2.pizza;
 // a Concrete Component
 public class PlainPizza implements Pizza {
 
-    private String size;
+    private PizzaSize size;
 
-    public PlainPizza(String size){
+    public PlainPizza(PizzaSize size){
         this.size = size;
     }
  
@@ -16,22 +16,22 @@ public class PlainPizza implements Pizza {
     public double getCost() {
         double cost = 0;
         switch (size){
-            case "large": cost = 5.00;
+            case large: cost = 5.00;
                 break;
-            case "medium": cost = 4.00;
+            case medium: cost = 4.00;
                 break;
-            case "small": cost = 3.00;
+            case small: cost = 3.00;
                 break;
         }
         System.out.println("Cost of plain pizza: " + cost);
         return cost;
     }
 
-    public String getSize(){
+    public PizzaSize getSize(){
         return size;
     }
 
-    public void setSize(String size){
+    public void setSize(PizzaSize size){
         this.size = size;
     }
 }
