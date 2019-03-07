@@ -1,40 +1,37 @@
 package week2.stock;
 
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TextView implements View  {
-    private Label name;
-    private Label stockIBM;
-    private Label stockAAPL;
-    private Label stockGOOG;
+    private HashMap<String, Label> stocks;
+    private ArrayList<StockObserver> stockObservers;
+    private VBox pane;
 
-    private ViewSubject stockObserver;
-    private GridPane pane;
+    public TextView(ArrayList<StockObserver> stockObservers) {
+        pane = new VBox();
+        stocks = new HashMap<>();
 
-    public TextView(StockObserver stockObserver) {
-        this.stockObserver = stockObserver;
-        pane = new GridPane();
-
-        name = new Label("Textview: ");
-        stockIBM = new Label("IBM: ");
-        stockAAPL = new Label("AAPL: ");
-        stockGOOG = new Label("GOOG: ");
-
-        pane.add(name, 0, 0);
-        pane.add(stockIBM, 0, 1);
-        pane.add(stockAAPL, 0, 2);
-        pane.add(stockGOOG, 0, 3);
-
-        stockObserver.register(this);
+        this.stockObservers = stockObservers;
+        for (StockObserver so : stockObservers) {
+            so.register(this);
+        }
     }
 
     @Override
-    public void update(double ibmPrice, double aaplPrice, double googPrice) {
-        stockIBM.setText("IBM: " + ibmPrice);
-        stockAAPL.setText("AAPL: " + aaplPrice);
-        stockGOOG.setText("GOOG: " + googPrice);
+    public void update(String stockName, double stockPrice) {
+        if (stocks.get(stockName) == null) {
+            Label l = new Label(stockName);
+            stocks.put(stockName, l);
+            Platform.runLater(() -> pane.getChildren().add(l));
+        }
+        Platform.runLater(() -> stocks.get(stockName).setText(stockName + ": " + stockPrice));
     }
 
     @Override

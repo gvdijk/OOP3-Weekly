@@ -4,8 +4,6 @@ import javafx.scene.layout.Pane;
 
 public interface View {
 
-    public void update(double ibmPrice,
-                       double aaplPrice, double googPrice);
-
+    public void update(String stockName, double stockPrice);
     public Pane getPane();
 }

@@ -5,10 +5,6 @@ import java.util.ArrayList;
 public class StockGrabber implements Subject {
     private ArrayList<Observer> observers;
 
-    private double ibmPrice;
-    private double aaplPrice;
-    private double googPrice;
-
     public StockGrabber() {
         observers = new ArrayList<>();
     }
@@ -21,24 +17,13 @@ public class StockGrabber implements Subject {
         observers.remove(newObserver);
     }
 
-    public void notifyObservers() {
+    public void notifyObservers(String stockName, double stockPrice) {
         for(Observer observer : observers){
-            observer.update(ibmPrice, aaplPrice, googPrice);
+            observer.update(stockName, stockPrice);
         }
     }
 
-    public void setIBMPrice(double newIBMPrice) {
-        this.ibmPrice = newIBMPrice;
-        notifyObservers();
-    }
-
-    public void setAAPLPrice(double newAAPLPrice) {
-        this.aaplPrice = newAAPLPrice;
-        notifyObservers();
-    }
-
-    public void setGOOGPrice(double newGOOGPrice) {
-        this.googPrice = newGOOGPrice;
-        notifyObservers();
+    public void setPrice(String stockName, double stockPrice) {
+        notifyObservers(stockName, stockPrice);
     }
 }

@@ -1,59 +1,57 @@
 package week2.stock;
 
+import javafx.application.Platform;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
-public class GraphView implements View{
-    private XYChart.Series stockIBM;
-    private XYChart.Series stockAAPL;
-    private XYChart.Series stockGOOG;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-    private ViewSubject stockObserver;
+public class GraphView implements View{
+    private HashMap<String, XYChart.Series> stocks;
+    private LineChart linechart;
+
+    private ArrayList<StockObserver> stockObservers;
     private GridPane pane;
 
     private int faketime = 0;
 
-    public GraphView(StockObserver stockObserver) {
+    public GraphView(ArrayList<StockObserver> stockObservers) {
+        stocks = new HashMap<>();
         pane = new GridPane();
         chart();
-        this.stockObserver = stockObserver;
-        stockObserver.register(this);
+        this.stockObservers = stockObservers;
+        for (StockObserver so : stockObservers) {
+            so.register(this);
+        }
     }
 
     @Override
-    public void update(double ibmPrice, double aaplPrice, double googPrice) {
+    public void update(String stockName, double stockPrice) {
         faketime++;
-        stockIBM.getData().add(new XYChart.Data(faketime, ibmPrice));
-        stockAAPL.getData().add(new XYChart.Data(faketime, aaplPrice));
-        stockGOOG.getData().add(new XYChart.Data(faketime, googPrice));
+        if (stocks.get(stockName) == null) {
+            XYChart.Series s = new XYChart.Series();
+            s.setName(stockName);
+            Platform.runLater(() -> linechart.getData().add(s));
+            stocks.put(stockName, s);
+        }
+        Platform.runLater(() -> stocks.get(stockName).getData().add(new XYChart.Data(faketime, stockPrice)));
     }
 
 
     public void chart() {
         // defining the x&y axis
-        NumberAxis xAxis = new NumberAxis(0, 10, 1);
+        NumberAxis xAxis = new NumberAxis(0, 50, 1);
         xAxis.setLabel("Timeunit");
         NumberAxis yAxis = new NumberAxis(0, 1000, 50);
         yAxis.setLabel("Stockprice");
 
         // creating the line chart
-        LineChart linechart = new LineChart(xAxis, yAxis);
+        linechart = new LineChart(xAxis, yAxis);
         linechart.setTitle("Stockprice history");
-
-        // defining a series
-        stockIBM = new XYChart.Series();
-        stockAAPL = new XYChart.Series();
-        stockGOOG = new XYChart.Series();
-        stockIBM.setName("IBM");
-        stockAAPL.setName("AAPL");
-        stockGOOG.setName("GOOG");
-
-        linechart.getData().add(stockIBM);
-        linechart.getData().add(stockAAPL);
-        linechart.getData().add(stockGOOG);
 
         this.pane.add(linechart, 0, 0);
     }

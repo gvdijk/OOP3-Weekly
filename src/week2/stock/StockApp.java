@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class StockApp extends Application {
 
     private ArrayList<View> views = new ArrayList<>();
+    private ArrayList<StockObserver> observers = new ArrayList<>();
 
     public void start(Stage primaryStage) {
 
@@ -19,15 +20,20 @@ public class StockApp extends Application {
         StockGrabber stockGrabber = new StockGrabber();
 
         // create and register concrete observer
-        StockObserver observer1 = new StockObserver(stockGrabber);
+        StockObserver observer1 = new StockObserver(stockGrabber, "IBM");
+        StockObserver observer2 = new StockObserver(stockGrabber, "AAPL");
+        StockObserver observer3 = new StockObserver(stockGrabber, "GOOG");
+        observers.add(observer1);
+        observers.add(observer2);
+        observers.add(observer3);
 
 
         GridPane pane = new GridPane();
         Button b1 = new Button("Text");
         Button b2 = new Button("Graph");
-        TextView v1 = new TextView(observer1);
+        TextView v1 = new TextView(observers);
         views.add(v1);
-        GraphView v2 = new GraphView(observer1);
+        GraphView v2 = new GraphView(observers);
         views.add(v2);
         b1.setOnAction(e -> switchView(v1));
         b2.setOnAction(e -> switchView(v2));
@@ -44,14 +50,13 @@ public class StockApp extends Application {
         primaryStage.show();
         pane.requestFocus();
 
-        Thread t1 = new Thread(new GetTheStock(stockGrabber));
-        stockGrabber.setIBMPrice(197.00);
-        stockGrabber.setAAPLPrice(677.60);
-        stockGrabber.setGOOGPrice(676.40);
 
-        stockGrabber.setIBMPrice(297.00);
-        stockGrabber.setAAPLPrice(577.60);
-        stockGrabber.setGOOGPrice(626.40);
+        Thread t1 = new Thread(new GetTheStock("IBM", stockGrabber));
+        Thread t2 = new Thread(new GetTheStock("AAPL", stockGrabber));
+        Thread t3 = new Thread(new GetTheStock("GOOG", stockGrabber));
+        t1.start();
+        t2.start();
+        t3.start();
     }
 
     void switchView(View v) {
