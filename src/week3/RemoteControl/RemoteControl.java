@@ -1,13 +1,36 @@
 package week3.RemoteControl;
 
-enum DeviceType {TV, STEREO}
+import week3.RemoteControl.commands.emptyCommand;
+import java.util.Stack;
 
 public class RemoteControl {
 
-    // return a command receiver
-    public static ElectronicDevice getDevice(DeviceType type){
-        if (type == DeviceType.TV) return new Television();
-        else if (type == DeviceType.STEREO) return new StereoReceiver();
-        else return null;
+    private Stack<DeviceButton> commandHistory = new Stack<>();
+    private DeviceButton[] buttons;
+    private Command undoButton;
+
+    public RemoteControl() {
+        buttons = new DeviceButton[4];
+        DeviceButton emptyButton = new DeviceButton(new emptyCommand(), "Empty Button");
+        for(int i=0;i<buttons.length;i++){
+            buttons[i] = emptyButton;
+        }
+        undoButton = new emptyCommand();
+    }
+
+    public void setButton(int i, DeviceButton button){
+        buttons[i] = button;
+    }
+
+    public void pressButton(int i){
+        buttons[i].execute();
+        commandHistory.push(buttons[i]);
+    }
+
+    public void printHistory(){
+        System.out.println("History of buttons pressed:");
+        for(DeviceButton button:commandHistory){
+            System.out.println(button);
+        }
     }
 }

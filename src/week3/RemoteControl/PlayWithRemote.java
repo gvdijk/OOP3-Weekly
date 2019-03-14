@@ -8,9 +8,9 @@ public class PlayWithRemote{
     public static void main(String[] args){
         
         // create command receiver for tv
-        ElectronicDevice tvDevice = RemoteControl.getDevice(DeviceType.TV);
+        ElectronicDevice tvDevice = new Television();
         // create command receiver for stereo
-        ElectronicDevice stereoDevice = RemoteControl.getDevice(DeviceType.STEREO);
+        ElectronicDevice stereoDevice = new StereoReceiver();
         
         // create all concrete commands for the tv, register the receiver
         TurnTVOn tvOnCommand = new TurnTVOn(tvDevice);
@@ -23,23 +23,5 @@ public class PlayWithRemote{
         TurnStereoOff stereoOffCommand = new TurnStereoOff(stereoDevice);
         StereoVolumeUp stereoVolumeUpCommand = new StereoVolumeUp(stereoDevice);
         StereoVolumeDown stereoVolumeDownCommand = new StereoVolumeDown(stereoDevice);
-
-        // create invokers
-        DeviceButton b = new DeviceButton();
-        
-        // invoke commands
-        b.execute(tvOnCommand);
-        for(int i=0;i<3;i++){
-            b.execute(tvVolumeUpCommand);
-        }
-        b.execute(tvVolumeDownCommand);
-        b.undo(tvVolumeDownCommand);
-
-        b.execute(stereoOnCommand);
-        b.execute(stereoVolumeUpCommand);
-        b.undo(stereoVolumeUpCommand);
-        b.execute(stereoOffCommand);
-
-        b.printHistory();
     }
 }
