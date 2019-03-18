@@ -1,0 +1,10 @@
+
+4a {
+
+}
+
+
+7 {
+    State:      Sets of behaviours are encapsulated in state objects. At any time the context is delegating to one of those states.
+    Strategy:   The behaviours are implemented in subclasses to change the behaviour of that object, rather than changing the behaviour of a Context object that has states.
+}
