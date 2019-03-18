@@ -10,9 +10,15 @@ public class DeviceButton {
         this.text = text;
     }
 
+    public Command getCommand(){
+        return command;
+    }
+
+    public String getText(){
+        return text;
+    }
+
     public void execute(){
-        
-        System.out.println("Device button is pressed !");
         command.execute();
     }
 }
