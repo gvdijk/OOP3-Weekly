@@ -1,0 +1,24 @@
+In Java multi-threading there are similarities with the command pattern.
+
+The Runnable interface act as the command interface, with the user creating classes that extend Runnable acting as
+concrete commands. The Thread class acts as the Invoker by holding a concrete command (Runnable) and executing it
+when necessary. Optionally, the Runnable interface can reference methods of another class, making this class the receiver.
+It can also hold the logic for executing inside itself, making the Runnable object the receiver as well as the concrete
+command.
+
+Summary:
+
+Runnable --> Command interface
+Classes extending Runnable --> Concrete commands
+Thread class --> Invoker
+Optional logic Class (or Runnable itself) --> Receiver
+
+9:
+
+1: H        8:  A
+2: B        9:  E
+3: F        10: I
+4: L        11: C
+5: M        12: D
+6: G        13: L
+7: K
