@@ -22,7 +22,12 @@ public class PlayingState implements State {
 
     @Override
     public void refund() {
-        System.out.println("Grabber is out of service");
+        if (grabber.getFunds() > 0) {
+            System.out.println("Refunding " + grabber.getFunds() + " funds...");
+            grabber.setFunds(0);
+        } else {
+            System.out.println("No funds available...");
+        }
     }
 
     @Override

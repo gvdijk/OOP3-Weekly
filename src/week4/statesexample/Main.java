@@ -16,7 +16,6 @@ public class Main {
         System.out.println("3. Insert coins");
         System.out.println("4. Refund funds");
         System.out.println("5. Refill prices");
-        System.out.println();
 
         Scanner scanner = new Scanner(System.in);
         while (active) {
