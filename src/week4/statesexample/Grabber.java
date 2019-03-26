@@ -84,7 +84,7 @@ public class Grabber {
                     public void run() {
                         state.grab();
                     }
-                },10000);
+                },8000);
     }
 
     public void release() {
@@ -94,7 +94,7 @@ public class Grabber {
                     public void run() {
                         state.release();
                     }
-                },5000);
+                },4000);
     }
 
     public int getPrices() {

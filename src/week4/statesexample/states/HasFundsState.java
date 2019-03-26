@@ -11,7 +11,9 @@ public class HasFundsState implements State {
 
     @Override
     public void start() {
+        System.out.println("Starting game...");
         grabber.setFunds(grabber.getFunds() - 1);
+        grabber.startTimer();
         grabber.setState(grabber.getPlayingState());
     }
 
@@ -24,7 +26,6 @@ public class HasFundsState implements State {
     @Override
     public void refund() {
         System.out.println("Refunding " + grabber.getFunds() + " funds...");
-        grabber.startTimer();
         grabber.setState(grabber.getIdleState());
     }
 

@@ -1,8 +1,4 @@
 package week4.statesexample;
-
-
-import week3.states.ATM;
-
 import java.util.Scanner;
 
 public class Main {
