@@ -1,6 +1,7 @@
 package week4.chatprogram.client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -9,18 +10,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class ClientView extends Application {
 
     //JavaFX components
     private Scene scene;
     //Chat view components
+    private TextField chatField;
     private VBox chatVBox;
     private Text chatNameField;
     private TextArea chatArea;
@@ -29,6 +33,7 @@ public class ClientView extends Application {
     //Other class variables
     private StringBuilder chatHistory;
     private String name;
+    private ClientThread messageThread;
 
     public static void main (String[] args){
         Application.launch(args);
@@ -52,14 +57,11 @@ public class ClientView extends Application {
         usernameField = new TextField();
         usernameField.setMaxWidth(300);
         Button setUsernameButton = new Button("Submit Username");
-        setUsernameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String text = usernameField.getText();
-                if (text.equals("")) name = null;
-                else name = text;
-                showChatView();
-            }
+        setUsernameButton.setOnAction(event-> {
+            String text = usernameField.getText();
+            if (text.equals("")) name = null;
+            else name = text;
+            showChatView();
         });
 
         //Add the components of the initial view
@@ -89,10 +91,14 @@ public class ClientView extends Application {
         chatArea.setEditable(false);
 
         //Create the textfield for the user to type in
-        TextField chatField = new TextField();
+        chatField = new TextField();
         chatField.setPrefWidth(550);
         //Create the send button to send the message
         Button sendButton = new Button("Send Message");
+        sendButton.setOnAction(event->{
+            messageThread.sendMessage(chatField.getText());
+            chatField.clear();
+        });
         //Add the textfield for the users to type in to the HBox
         chatHBox.getChildren().add(chatField);
         //Add the Button to the HBox
@@ -106,6 +112,17 @@ public class ClientView extends Application {
         chatVBox.getChildren().add(chatHBox);
 
         scene = new Scene(initialViewBox);
+
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER){
+                String text = usernameField.getText();
+                if (text.equals("")) name = null;
+                else name = text;
+                showChatView();
+            }
+        });
+
+        primaryStage.setOnCloseRequest(event -> messageThread.sendMessage("ByeBye"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -114,13 +131,25 @@ public class ClientView extends Application {
         String chatName = "Your chat name: ";
         if (name == null) name = "Anonymous";
         chatName += name;
+
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER){
+                messageThread.sendMessage(chatField.getText());
+                chatField.clear();
+            }
+        });
+
+        messageThread = new ClientThread("localhost", 8000, name, this);
+        Thread thread = new Thread(messageThread);
+        thread.start();
+
         chatNameField.setText(chatName);
         scene.setRoot(chatVBox);
     }
 
-    private void updateChatHistory(String text){
+    public void updateChatHistory(String text){
         chatHistory.append(text);
         chatHistory.append("\n");
-        chatArea.setText(chatHistory.toString());
+        Platform.runLater(() -> chatArea.setText(chatHistory.toString()));
     }
 }
