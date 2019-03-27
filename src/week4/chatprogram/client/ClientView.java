@@ -1,4 +1,4 @@
-package chatapp_client;
+package week4.chatprogram.client;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -29,6 +29,10 @@ public class ClientView extends Application {
     //Other class variables
     private StringBuilder chatHistory;
     private String name;
+
+    public static void main (String[] args){
+        Application.launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
