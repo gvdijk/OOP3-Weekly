@@ -30,7 +30,6 @@ public class ServerThread implements Runnable {
         String line;
         try {
             while ((line = input.readLine()) != null){
-                System.out.println("Received message: " + line);
                 if(line.endsWith("ByeBye")){
                     server.broadcast(name + " has left the chat :(");
                     break;

@@ -1,7 +1,9 @@
-package week4.chatprogram.client;
+package week4.chatprogram.client2;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,8 +17,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
-public class ClientView extends Application {
+public class ClientView2 extends Application {
 
     //JavaFX components
     private Scene scene;
@@ -30,7 +33,7 @@ public class ClientView extends Application {
     //Other class variables
     private StringBuilder chatHistory;
     private String name;
-    private ClientThread messageThread;
+    private ClientThread2 messageThread;
 
     public static void main (String[] args){
         Application.launch(args);
@@ -136,7 +139,7 @@ public class ClientView extends Application {
             }
         });
 
-        messageThread = new ClientThread("localhost", 8000, name, this);
+        messageThread = new ClientThread2("localhost", 8000, name, this);
         Thread thread = new Thread(messageThread);
         thread.start();
 
